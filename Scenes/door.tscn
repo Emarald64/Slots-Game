@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://b44f2sqxkq3fb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h7j2x"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w6aom"]
+
+[node name="Door" type="StaticBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_h7j2x")
+
+[node name="Door Detection" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door Detection"]
+shape = SubResource("RectangleShape2D_w6aom")
