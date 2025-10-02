@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bjlbohkap0quv"]
+
+[ext_resource type="Script" uid="uid://dnun5hkkfaxem" path="res://Scenes/slot.gd" id="1_luhj6"]
+[ext_resource type="Texture2D" uid="uid://c5xn87kacgh51" path="res://assets/icons.png" id="2_12ej0"]
+[ext_resource type="Texture2D" uid="uid://b0m3b3o2k3ci2" path="res://assets/slots frame.png" id="3_67ou1"]
+
+[node name="Slot" type="Node2D"]
+script = ExtResource("1_luhj6")
+
+[node name="Clip" type="Polygon2D" parent="."]
+clip_children = 1
+polygon = PackedVector2Array(-8, -26, 8, -26, 8, 26, -8, 26)
+
+[node name="Icons" type="Node2D" parent="Clip"]
+texture_filter = 1
+position = Vector2(0, -24)
+
+[node name="Sprite2D" type="Sprite2D" parent="Clip/Icons"]
+texture = ExtResource("2_12ej0")
+hframes = 10
+
+[node name="Slot Frame" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("3_67ou1")

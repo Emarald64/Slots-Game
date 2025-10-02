@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://civ45wiqohlx4"]
-
-[ext_resource type="TileSet" uid="uid://ca7un4ceg8w7n" path="res://Scenes/Rooms/room-tileset.tres" id="1_7fk0y"]
-
-[node name="Room" type="TileMapLayer"]
-tile_set = ExtResource("1_7fk0y")
