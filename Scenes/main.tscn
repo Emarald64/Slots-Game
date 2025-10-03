@@ -82,3 +82,4 @@ text = "10"
 [node name="Shop" parent="." instance=ExtResource("4_kry3j")]
 
 [connection signal="pressed" from="Button" to="." method="_on_stop_pressed"]
+[connection signal="stopped" from="Slots/Slot2" to="." method="score"]

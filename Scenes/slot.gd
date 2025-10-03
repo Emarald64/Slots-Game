@@ -1,5 +1,7 @@
 extends Node2D
 
+signal stopped
+
 enum {HEART,DIAMOND,CLUB,SPADE,DIE,GEM,SEVEN,ORANGE,BAR,STAR}
 enum actions {NONE,STOP,START}
 
@@ -25,6 +27,8 @@ func _physics_process(delta: float) -> void:
 	if velocity>=0 and stopping:
 		acceleration=0
 		velocity=0
+		stopped.emit()
+		stopping=false
 	elif velocity<=maxSpeed and starting:
 		acceleration=0
 		starting=false
@@ -66,3 +70,10 @@ func doAction() -> void:
 			start()
 		actions.STOP:
 			stop()
+
+func getVisibleIcons() -> PackedByteArray:
+	var out:=PackedByteArray()
+	for i in range(3):
+		out.append(currentIcons[i+(roundi($Clip/Icons.position.y/18)%len(currentIcons))])
+	return out
+	

@@ -20,3 +20,7 @@ func _on_stop_pressed() -> void:
 			$"Button Lockout".wait_time=1.5 if currentSlot==2 else 0.1
 			currentSlot+=1
 		$"Button Lockout".start()
+
+func score():
+	for i in range(3):
+		print("slot "+str(i)+" "+str(get_node("Slots/Slot"+str(i)).getVisibleIcons()))
