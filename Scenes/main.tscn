@@ -1,11 +1,84 @@
-[gd_scene load_steps=2 format=3 uid="uid://ds7u7j0ga64f8"]
+[gd_scene load_steps=5 format=3 uid="uid://ds7u7j0ga64f8"]
 
-[sub_resource type="GDScript" id="GDScript_7u77a"]
-script/source = "extends Node2D
-
-var keys:=5
-var coins:=0
-"
+[ext_resource type="Script" uid="uid://b7kd2jg511u4y" path="res://Scenes/main.gd" id="1_bo1nx"]
+[ext_resource type="PackedScene" uid="uid://bjlbohkap0quv" path="res://Scenes/slot.tscn" id="1_jjgbg"]
+[ext_resource type="Texture2D" uid="uid://cvq4dpuebrcgb" path="res://assets/coin.png" id="3_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://cxe8woywl0e8x" path="res://Scenes/shop.tscn" id="4_kry3j"]
 
 [node name="main" type="Node2D"]
-script = SubResource("GDScript_7u77a")
+script = ExtResource("1_bo1nx")
+
+[node name="Button" type="Button" parent="."]
+offset_left = 608.0
+offset_top = 480.0
+offset_right = 755.0
+offset_bottom = 576.0
+theme_override_font_sizes/font_size = 64
+text = "Stop"
+
+[node name="Slots" type="Node2D" parent="."]
+
+[node name="Slot2" parent="Slots" instance=ExtResource("1_jjgbg")]
+position = Vector2(483, 311)
+scale = Vector2(6, 6)
+
+[node name="Slot1" parent="Slots" instance=ExtResource("1_jjgbg")]
+position = Vector2(304, 311)
+scale = Vector2(6, 6)
+
+[node name="Slot0" parent="Slots" instance=ExtResource("1_jjgbg")]
+position = Vector2(120, 311)
+scale = Vector2(6, 6)
+
+[node name="Button Lockout" type="Timer" parent="."]
+one_shot = true
+
+[node name="Score Lines" type="Node2D" parent="."]
+modulate = Color(1, 1, 1, 0.22745098)
+
+[node name="Line2D" type="Line2D" parent="Score Lines"]
+points = PackedVector2Array(27, 311, 569, 311)
+width = 5.0
+default_color = Color(1, 1, 0, 1)
+
+[node name="Line2D4" type="Line2D" parent="Score Lines"]
+points = PackedVector2Array(27, 152, 571, 469)
+width = 5.0
+default_color = Color(1, 1, 0, 1)
+
+[node name="Line2D5" type="Line2D" parent="Score Lines"]
+points = PackedVector2Array(27, 469, 571, 152)
+width = 5.0
+default_color = Color(1, 1, 0, 1)
+
+[node name="Line2D3" type="Line2D" parent="Score Lines"]
+points = PackedVector2Array(27, 203, 569, 203)
+width = 5.0
+default_color = Color(1, 1, 0, 1)
+
+[node name="Line2D2" type="Line2D" parent="Score Lines"]
+points = PackedVector2Array(34, 419, 574, 419)
+width = 5.0
+default_color = Color(1, 1, 0, 1)
+
+[node name="Coin Display" type="HBoxContainer" parent="."]
+offset_left = 787.0
+offset_top = 484.0
+offset_right = 969.0
+offset_bottom = 568.0
+
+[node name="TextureRect" type="TextureRect" parent="Coin Display"]
+texture_filter = 1
+custom_minimum_size = Vector2(70, 50)
+layout_mode = 2
+texture = ExtResource("3_jjvhh")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Coin Display"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "10"
+
+[node name="Shop" parent="." instance=ExtResource("4_kry3j")]
+
+[connection signal="pressed" from="Button" to="." method="_on_stop_pressed"]

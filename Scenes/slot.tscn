@@ -9,7 +9,7 @@ script = ExtResource("1_luhj6")
 
 [node name="Clip" type="Polygon2D" parent="."]
 clip_children = 1
-polygon = PackedVector2Array(-8, -26, 8, -26, 8, 26, -8, 26)
+polygon = PackedVector2Array(-8, -44, 8, -44, 8, 44, -8, 44)
 
 [node name="Icons" type="Node2D" parent="Clip"]
 texture_filter = 1
@@ -22,3 +22,8 @@ hframes = 10
 [node name="Slot Frame" type="Sprite2D" parent="."]
 texture_filter = 1
 texture = ExtResource("3_67ou1")
+
+[node name="Action delay" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Action delay" to="." method="doAction"]
