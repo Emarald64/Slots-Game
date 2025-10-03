@@ -8,7 +8,6 @@
 script = ExtResource("1_luhj6")
 
 [node name="Clip" type="Polygon2D" parent="."]
-clip_children = 1
 polygon = PackedVector2Array(-8, -44, 8, -44, 8, 44, -8, 44)
 
 [node name="Icons" type="Node2D" parent="Clip"]

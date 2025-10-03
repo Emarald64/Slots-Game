@@ -11,7 +11,8 @@ var velocity:float=maxSpeed
 var stopping:=false
 var starting:=false
 var currentAction:= actions.NONE
-var currentIcons:=[HEART,DIAMOND,CLUB,SPADE,GEM,ORANGE,STAR,HEART,DIAMOND,CLUB,SPADE,DIE,HEART,DIAMOND,CLUB,SPADE,GEM,ORANGE,STAR,HEART,DIAMOND,CLUB,SPADE,DIE,SEVEN]
+#var currentIcons:=[HEART,DIAMOND,CLUB,SPADE,GEM,ORANGE,STAR,HEART,DIAMOND,CLUB,SPADE,DIE,HEART,DIAMOND,CLUB,SPADE,GEM,ORANGE,STAR,HEART,DIAMOND,CLUB,SPADE,DIE,SEVEN]
+var currentIcons:=[SEVEN]
 
 
 # Called when the node enters the scene tree for the first time.
@@ -74,6 +75,6 @@ func doAction() -> void:
 func getVisibleIcons() -> PackedByteArray:
 	var out:=PackedByteArray()
 	for i in range(3):
-		out.append(currentIcons[i+(roundi($Clip/Icons.position.y/18)%len(currentIcons))])
+		out.append(currentIcons[posmod(i-1-(roundi($Clip/Icons.position.y/18)),len(currentIcons))])
 	return out
 	
