@@ -70,7 +70,7 @@ offset_top = 523.0
 offset_right = 759.0
 offset_bottom = 619.0
 theme_override_font_sizes/font_size = 64
-text = "Stop"
+text = "Start"
 
 [node name="Slots" type="Node2D" parent="."]
 
@@ -136,6 +136,8 @@ theme_override_font_sizes/font_size = 48
 text = "10"
 
 [node name="Shop" parent="." instance=ExtResource("4_kry3j")]
+offset_left = 597.0
+offset_right = 1139.0
 
 [node name="New Coins" type="Label" parent="."]
 modulate = Color(1, 1, 1, 0)

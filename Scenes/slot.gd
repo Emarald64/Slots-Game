@@ -5,14 +5,15 @@ signal stopped
 enum {HEART,DIAMOND,CLUB,SPADE,DIE,GEM,SEVEN,ORANGE,BAR,STAR}
 enum actions {NONE,STOP,START}
 
+@export var slotSlipping:=3
 var acceleration:=0.0
-var maxSpeed:=-175
-var velocity:float=maxSpeed
+var maxSpeed:= -150
+var velocity:=0.0
 var stopping:=false
 var starting:=false
 var currentAction:= actions.NONE
-#var currentIcons:=[HEART,DIAMOND,CLUB,SPADE,GEM,ORANGE,STAR,HEART,DIAMOND,CLUB,SPADE,DIE,HEART,DIAMOND,CLUB,SPADE,GEM,ORANGE,STAR,HEART,DIAMOND,CLUB,SPADE,DIE,SEVEN]
-var currentIcons:=[SEVEN]
+var currentIcons:=[HEART,DIAMOND,CLUB,SPADE,GEM,ORANGE,STAR,HEART,DIAMOND,CLUB,SPADE,DIE,HEART,DIAMOND,CLUB,SPADE,GEM,ORANGE,STAR,HEART,DIAMOND,CLUB,SPADE,DIE,SEVEN]
+#var currentIcons:=[SEVEN]
 
 
 # Called when the node enters the scene tree for the first time.
@@ -43,7 +44,7 @@ func updateIcons() -> void:
 	for sprite in $Clip/Icons.get_children():
 		sprite.free()
 	# add new icons
-	for iconIdx in range(len(currentIcons)+5):
+	for iconIdx in range(len(currentIcons)+6):
 		var sprite:=Sprite2D.new()
 		sprite.texture=preload("res://assets/icons.png")
 		sprite.hframes=10
@@ -52,7 +53,7 @@ func updateIcons() -> void:
 		$Clip/Icons.add_child(sprite)
 
 func stop() -> void:
-	acceleration=(velocity**2)/(2*(54+fposmod($Clip/Icons.position.y,18.0)))
+	acceleration=(velocity**2)/(2*((slotSlipping*18)+fposmod($Clip/Icons.position.y,18.0)))
 	stopping=true
 
 func startWithDelay(delay:=0.0):

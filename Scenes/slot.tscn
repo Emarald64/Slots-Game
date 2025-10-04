@@ -8,11 +8,12 @@
 script = ExtResource("1_luhj6")
 
 [node name="Clip" type="Polygon2D" parent="."]
-polygon = PackedVector2Array(-8, -44, 8, -44, 8, 44, -8, 44)
+clip_children = 1
+polygon = PackedVector2Array(-8, -45, 8, -45, 8, 45, -8, 45)
 
 [node name="Icons" type="Node2D" parent="Clip"]
 texture_filter = 1
-position = Vector2(0, -24)
+position = Vector2(0, -36)
 
 [node name="Sprite2D" type="Sprite2D" parent="Clip/Icons"]
 texture = ExtResource("2_12ej0")

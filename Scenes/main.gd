@@ -1,10 +1,13 @@
 extends Node2D
 
-var coins:=10
-var currentSlot:=0
+var coins:=50
+var currentSlot:=3
 var coinsToAdd:=0
 var coinAddProgress:=0.0
 var coinCountSpeed:=10.0
+
+func _ready() -> void:
+	$Button.grab_focus.call_deferred()
 
 func _process(delta: float) -> void:
 	#Animate coin counter
@@ -19,14 +22,16 @@ func _process(delta: float) -> void:
 func _on_stop_pressed() -> void:
 	if $"Button Lockout".is_stopped():
 		if currentSlot==3:
-			print('start')
-			for i in range(3):
-				get_node("Slots/Slot"+str(i)).startWithDelay((i/5.0)+randf_range(0,0.15))
-			$Button.text='Stop'
-			$"Button Lockout".wait_time=1.8
-			currentSlot=0
-			coins-=1
-			$"Coin Display/Label".text=str(coins)
+			if coins<=0:
+				get_tree().reload_current_scene()
+			else:
+				for i in range(3):
+					get_node("Slots/Slot"+str(i)).startWithDelay(((2-i)/4.0)+randf_range(0,0.2))
+				$Button.text='Stop'
+				$"Button Lockout".wait_time=1.8
+				currentSlot=0
+				coins-=1
+				$"Coin Display/Label".text=str(coins)
 		else:
 			get_node("Slots/Slot"+str(currentSlot)).stop()
 			if currentSlot==2:
@@ -37,7 +42,12 @@ func _on_stop_pressed() -> void:
 
 func addCoins(ammount:int):
 	$AnimationPlayer.play("Add Coins")
-	$"New Coins".text="+"+str(ammount)
+	if ammount<0:
+		$"New Coins".add_theme_color_override("font_color",Color(1,0,0))
+		$"New Coins".text=str(ammount)
+	else:
+		$"New Coins".add_theme_color_override("font_color",Color(0,1,0))
+		$"New Coins".text="+"+str(ammount)
 	coinsToAdd+=ammount
 	coinCountSpeed=max(10.0,ammount/2.0)
 
@@ -63,4 +73,4 @@ func score():
 		newCoins+=scoreRow(slots[0][0])
 	if slots[2][0]==slots[1][1] and slots[2][0]==slots[0][2]:
 		newCoins+=scoreRow(slots[2][0])
-	addCoins(newCoins)
+	if newCoins>0:addCoins(newCoins)
