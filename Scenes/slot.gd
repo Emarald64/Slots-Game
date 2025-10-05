@@ -5,7 +5,7 @@ signal stopped
 enum {HEART,DIAMOND,CLUB,SPADE,DIE,GEM,SEVEN,ORANGE,BAR,STAR}
 enum actions {NONE,STOP,START}
 
-@export var slotSlipping:=3
+@export var slotSlipping:=2
 var acceleration:=0.0
 var maxSpeed:= -150
 var velocity:=0.0
@@ -13,7 +13,7 @@ var stopping:=false
 var starting:=false
 var currentAction:= actions.NONE
 var currentIcons:=[HEART,DIAMOND,CLUB,SPADE,GEM,ORANGE,STAR,HEART,DIAMOND,CLUB,SPADE,DIE,HEART,DIAMOND,CLUB,SPADE,GEM,ORANGE,STAR,HEART,DIAMOND,CLUB,SPADE,DIE,SEVEN]
-#var currentIcons:=[SEVEN]
+
 
 
 # Called when the node enters the scene tree for the first time.
@@ -55,6 +55,24 @@ func updateIcons() -> void:
 func stop() -> void:
 	acceleration=(velocity**2)/(2*((slotSlipping*18)+fposmod($Clip/Icons.position.y,18.0)))
 	stopping=true
+
+func luckyStop(iconToRig:Vector2i)->bool:
+	print(iconToRig)
+	if iconToRig[0]!=-1:
+		for i in range(3):
+			#debug
+			#var debug=[]
+			#for j in range(3):
+				#debug.append(currentIcons[posmod(j+i-2+slotSlipping-(roundi($Clip/Icons.position.y/18)),len(currentIcons))])
+			#print(debug)
+			if iconToRig[1]==currentIcons[posmod(i-2+iconToRig[0]+slotSlipping-(floori($Clip/Icons.position.y/18)),len(currentIcons))]:
+				acceleration=(velocity**2)/(2*(((slotSlipping+i-1)*18)+fposmod($Clip/Icons.position.y,18.0)))
+				stopping=true
+				print('lucky slip: '+str(i-1))
+				return i!=1
+	print("couldn't lucky slip")
+	stop()
+	return false
 
 func startWithDelay(delay:=0.0):
 	currentAction=actions.START

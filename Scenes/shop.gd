@@ -1,13 +1,34 @@
 extends PanelContainer
 
-enum affect {spinSpeed, slotSlipping, sevenCount, maxMult}
+enum affect {spinSpeed, slotSlipping, sevenCount, maxMult, luckySlipChance, lastSlotSpeed}
 enum icons {HEART,DIAMOND,CLUB,SPADE,DIE,GEM,SEVEN,ORANGE,BAR,STAR}
 
 const shopItems={
-	"Chewed Gum":["Stick it into the machine to make the slots 20% slower.",200,affect.spinSpeed,0.80,[]],
-	"Multiplication Key":["Unlock coin multiplies which increase every time you get\n3 in a row and decreace when you don't",400,affect.maxMult,2,[]],
-	"Socket Wrench":["Tighten the gears to make them slip less before stopping",600,affect.slotSlipping,1,['Chewed Gum']],
-	"Seven Dollar Bill":["Printed in 1777 and has the face\nof the seventh president, Andrew Jackson.\nAdds a second seven to the last slot.",777,affect.sevenCount,2,['Socket Wrench']],
+	"Chewed Gum":[
+		"Stick it into the machine to make the slots 30% slower.",
+		200,
+		{affect.spinSpeed:0.70},
+		[]],
+	"Multiplication Key":[
+		"Unlock coin multiplies which increases every time you get\n3 in a row and decreaces when you don't",
+		400,
+		{affect.maxMult:2},
+		[]],
+	#"Socket Wrench":[
+		#"Tighten the gears to make them slip less before stopping",
+		#600,
+		#{affect.slotSlipping:1},
+		#['Chewed Gum']],
+	"Lucky Oil":[
+		"If on the last slot you would be one away from scoring\nadds a 50% chance for the reals to slip\none more or less to hit it but\ncauses the last reel to spin 25% faster",
+		500,
+		{affect.luckySlipChance:0.5,affect.lastSlotSpeed:1.25},
+		["Chewed Gum"]],
+	"Seven Dollar Bill":[
+		"Printed in 1777 and has the face\nof the seventh president, Andrew Jackson.\nAdds a second seven to the last slot.",
+		777,
+		{affect.sevenCount:2},
+		['Lucky Oil']],
 }
 var currentItems:PackedStringArray=["Chewed Gum","Multiplication Key"]
 var boughtItems:PackedStringArray=[]
@@ -40,31 +61,42 @@ func updateShop():
 		
 
 func shopItemPressed(title:String):
-	if(get_parent().coins>=shopItems[title][1]):
-		get_parent().addCoins(-shopItems[title][1])
-		match shopItems[title][2]:
-			affect.spinSpeed:
-				for i in range(3):
-					var currentSlot=get_node("../Slots/Slot"+str(i))
-					currentSlot.maxSpeed*=shopItems[title][3]
-					if currentSlot.velocity<currentSlot.maxSpeed:
+	var item=shopItems[title]
+	if(get_parent().coins>=item[1]):
+		get_parent().addCoins(-item[1])
+		for itemAffect in item[2]:
+			match itemAffect:
+				affect.spinSpeed:
+					for i in range(3):
+						var currentSlot=get_node("../Slots/Slot"+str(i))
+						var spinning=currentSlot.velocity<currentSlot.maxSpeed+1
+						currentSlot.maxSpeed*=item[2][itemAffect]
+						if spinning:
+							currentSlot.velocity=currentSlot.maxSpeed
+				affect.sevenCount:
+					get_node("../Slots/Slot"+str(item[2][itemAffect])).currentIcons.append(icons.SEVEN)
+					get_node("../Slots/Slot"+str(item[2][itemAffect])).updateIcons()
+				affect.slotSlipping:
+					for i in range(3):
+						var currentSlot=get_node("../Slots/Slot"+str(i))
+						currentSlot.slotSlipping-=item[2][itemAffect]
+				affect.maxMult:
+					get_parent().maxMult*=item[2][itemAffect]
+					get_node('../Mult').show()
+					get_node('../Max Mult').show()
+					get_parent().updateMult()
+				affect.luckySlipChance:
+					get_parent().luckySlipChance+=item[2][itemAffect]
+				affect.lastSlotSpeed:
+					var currentSlot=get_node("../Slots/Slot2")
+					var spinning=currentSlot.velocity<currentSlot.maxSpeed+1
+					currentSlot.maxSpeed*=item[2][itemAffect]
+					if spinning:
 						currentSlot.velocity=currentSlot.maxSpeed
-			affect.sevenCount:
-				get_node("../Slots/Slot"+str(shopItems[title][3])).currentIcons.append(icons.SEVEN)
-				get_node("../Slots/Slot"+str(shopItems[title][3])).updateIcons()
-			affect.slotSlipping:
-				for i in range(3):
-					var currentSlot=get_node("../Slots/Slot"+str(i))
-					currentSlot.slotSlipping-=shopItems[title][3]
-			affect.maxMult:
-				get_parent().maxMult*=shopItems[title][3]
-				get_node('../Mult').show()
-				get_node('../Max Mult').show()
-				get_parent().updateMult()
 		currentItems.erase(title)
 		boughtItems.append(title)
-		for item in shopItems:
-			if item not in boughtItems and item not in currentItems and shopItems[item][4].all(boughtItems.has):
-				currentItems.append(item)
+		for itemToUnlock in shopItems:
+			if itemToUnlock not in boughtItems and itemToUnlock not in currentItems and shopItems[itemToUnlock][3].all(boughtItems.has):
+				currentItems.append(itemToUnlock)
 		#print(currentItems)
 		updateShop()

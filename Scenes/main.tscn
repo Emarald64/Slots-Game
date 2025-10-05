@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://ds7u7j0ga64f8"]
+[gd_scene load_steps=23 format=3 uid="uid://ds7u7j0ga64f8"]
 
 [ext_resource type="Script" uid="uid://b7kd2jg511u4y" path="res://Scenes/main.gd" id="1_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://bjlbohkap0quv" path="res://Scenes/slot.tscn" id="1_jjgbg"]
@@ -59,10 +59,39 @@ tracks/1/keys = {
 "points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Lucky:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ynf5e"]
+resource_name = "Lucky"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Lucky:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.25, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_21xkr"]
 _data = {
 &"Add Coins": SubResource("Animation_jjvhh"),
+&"Lucky": SubResource("Animation_ynf5e"),
 &"RESET": SubResource("Animation_kry3j")
 }
 
@@ -108,6 +137,13 @@ frame_2/texture = ExtResource("8_d1ilt")
 frame_2/duration = 1.0
 frame_3/texture = ExtResource("9_6iyac")
 frame_3/duration = 1.0
+
+[sub_resource type="Gradient" id="Gradient_ynf5e"]
+colors = PackedColorArray(1, 0.90000004, 0, 1, 1, 0.15066665, 0.01999998, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hptm8"]
+gradient = SubResource("Gradient_ynf5e")
+fill_to = Vector2(0, 1)
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_bo1nx")
@@ -215,7 +251,8 @@ text = "Guide"
 oversampling_override = 1.0
 title = "Guide"
 initial_position = 4
-size = Vector2i(389, 257)
+size = Vector2i(391, 310)
+visible = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Popup"]
 anchors_preset = 15
@@ -419,6 +456,12 @@ layout_mode = 2
 text = "Mult doubles when you score.
 All mult over 1 halves when you miss."
 
+[node name="Label3" type="Label" parent="Popup/VBoxContainer"]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+text = "Lucky slips can only happen for the highest value set posible with the first 2 icons"
+autowrap_mode = 2
+
 [node name="Mult" type="Label" parent="."]
 visible = false
 offset_left = 841.0
@@ -428,7 +471,7 @@ offset_bottom = 551.0
 theme_override_font_sizes/font_size = 96
 text = "x1.0"
 horizontal_alignment = 1
-vertical_alignment = 1
+vertical_alignment = 2
 
 [node name="Max Mult" type="Label" parent="."]
 visible = false
@@ -438,6 +481,28 @@ offset_right = 1133.0
 offset_bottom = 583.0
 theme_override_font_sizes/font_size = 24
 text = "Max: x2.0"
+
+[node name="Lucky" type="Label" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+clip_children = 1
+offset_left = 155.0
+offset_top = 240.0
+offset_right = 448.0
+offset_bottom = 372.00037
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 96
+text = "Lucky!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Lucky"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_hptm8")
 
 [connection signal="pressed" from="Button" to="." method="_on_stop_pressed"]
 [connection signal="stopped" from="Slots/Slot2" to="." method="score"]

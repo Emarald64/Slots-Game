@@ -1,12 +1,14 @@
 extends Node2D
 
-var coins:=100
+var coins:=1000
 var currentSlot:=3
 var coinsToAdd:=0
 var coinAddProgress:=0.0
 var coinCountSpeed:=10.0
 var maxMult:=1.0
 var mult:=1.0
+var luckySlipChance:=0.0
+var justDidLuckySlip:=false
 
 func _ready() -> void:
 	$Button.grab_focus.call_deferred()
@@ -39,9 +41,13 @@ func _on_stop_pressed() -> void:
 				currentSlot=0
 				addCoins(-10)
 		else:
-			get_node("Slots/Slot"+str(currentSlot)).stop()
 			if currentSlot==2:
 				$Button.text='Start'
+				if randf()>luckySlipChance:justDidLuckySlip=$Slots/Slot2.luckyStop(partialScore())
+				else:
+					justDidLuckySlip=false
+					$Slots/Slot2.stop()
+			else:get_node("Slots/Slot"+str(currentSlot)).stop()
 			$"Button Lockout".wait_time=1.5 if currentSlot==2 else 0.1
 			currentSlot+=1
 		$"Button Lockout".start()
@@ -56,7 +62,6 @@ func addCoins(ammount:int):
 		$"New Coins".text="+"+str(ammount)
 	coinsToAdd+=ammount
 	coinCountSpeed=max(10.0,absf(coinsToAdd/2.0))
-	print(coinCountSpeed)
 
 func scoreRow(icon:int) -> int:
 	const iconScores=[100,100,100,100,-1,300,777,150,5,200]
@@ -66,9 +71,10 @@ func scoreRow(icon:int) -> int:
 func score():
 	var slots:=[]
 	var newCoins:=0
-	#addCoins(10)
+	#Read the slots
 	for i in range(3):
 		slots.append(get_node("Slots/Slot"+str(i)).getVisibleIcons())
+		
 #	horazontals
 	for i in range(3):
 		if slots[0][i]==slots[1][i] and slots[0][i]==slots[2][i]:
@@ -83,9 +89,33 @@ func score():
 		@warning_ignore("narrowing_conversion")
 		addCoins(newCoins*mult)
 		mult=min(maxMult,mult*2)
+		if justDidLuckySlip:$AnimationPlayer.play("Lucky")
 	else:
 		mult=((mult-1)/2)+1
 	if maxMult>1:updateMult()
+	
+func partialScore() -> Vector2i:
+	var slots:=[]
+	var maxRowIcon:=8
+	var maxRowLocation:=-1
+	#Read the slots
+	for i in range(2):
+		slots.append(get_node("Slots/Slot"+str(i)).getVisibleIcons())
+	#Horazonontals
+	for i in range(3):
+		if slots[0][i]==slots[1][i] and scoreRow(slots[0][i])>scoreRow(maxRowIcon):
+			maxRowLocation=i
+			maxRowIcon=slots[0][i]
+			
+	#Diagonals
+	if slots[0][0]==slots[1][1] and scoreRow(slots[0][0])>scoreRow(maxRowIcon):
+		maxRowLocation=2
+		maxRowIcon=slots[0][0]
+	if slots[0][2]==slots[1][1] and scoreRow(slots[0][2])>scoreRow(maxRowIcon):
+		maxRowLocation=0
+		maxRowIcon=slots[0][2]
+	
+	return Vector2i(maxRowLocation,maxRowIcon)
 	
 func updateMult():
 	$"Max Mult".text='Max: x'+str(maxMult)
