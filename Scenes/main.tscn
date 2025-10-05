@@ -1,9 +1,14 @@
-[gd_scene load_steps=8 format=3 uid="uid://ds7u7j0ga64f8"]
+[gd_scene load_steps=20 format=3 uid="uid://ds7u7j0ga64f8"]
 
 [ext_resource type="Script" uid="uid://b7kd2jg511u4y" path="res://Scenes/main.gd" id="1_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://bjlbohkap0quv" path="res://Scenes/slot.tscn" id="1_jjgbg"]
 [ext_resource type="Texture2D" uid="uid://cvq4dpuebrcgb" path="res://assets/coin.png" id="3_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://cxe8woywl0e8x" path="res://Scenes/shop.tscn" id="4_kry3j"]
+[ext_resource type="Texture2D" uid="uid://c5xn87kacgh51" path="res://assets/icons.png" id="5_kry3j"]
+[ext_resource type="Texture2D" uid="uid://cdq6etk1vxyot" path="res://assets/suits/suits_0001.png" id="6_ynf5e"]
+[ext_resource type="Texture2D" uid="uid://bjbafyy0rln0i" path="res://assets/suits/suits_0002.png" id="7_hptm8"]
+[ext_resource type="Texture2D" uid="uid://w3x57x76ls64" path="res://assets/suits/suits_0003.png" id="8_d1ilt"]
+[ext_resource type="Texture2D" uid="uid://m5nk5uh32aps" path="res://assets/suits/suits_0004.png" id="9_6iyac"]
 
 [sub_resource type="Animation" id="Animation_jjvhh"]
 resource_name = "Add Coins"
@@ -60,6 +65,49 @@ _data = {
 &"Add Coins": SubResource("Animation_jjvhh"),
 &"RESET": SubResource("Animation_kry3j")
 }
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ynf5e"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_21xkr"]
+atlas = ExtResource("5_kry3j")
+region = Rect2(97, 0, 15, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6bp64"]
+atlas = ExtResource("5_kry3j")
+region = Rect2(79, 0, 18, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_344ge"]
+atlas = ExtResource("5_kry3j")
+region = Rect2(65, 0, 14, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ynf5e"]
+atlas = ExtResource("5_kry3j")
+region = Rect2(144, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kry3j"]
+atlas = ExtResource("5_kry3j")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_jkdf5"]
+frames = 4
+speed_scale = 2.0
+frame_0/texture = ExtResource("6_ynf5e")
+frame_1/texture = ExtResource("7_hptm8")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("8_d1ilt")
+frame_2/duration = 1.0
+frame_3/texture = ExtResource("9_6iyac")
+frame_3/duration = 1.0
 
 [node name="main" type="Node2D"]
 script = ExtResource("1_bo1nx")
@@ -155,5 +203,242 @@ libraries = {
 &"": SubResource("AnimationLibrary_21xkr")
 }
 
+[node name="Guide Button" type="Button" parent="."]
+offset_left = 611.0
+offset_top = 422.0
+offset_right = 710.0
+offset_bottom = 475.0
+theme_override_font_sizes/font_size = 32
+text = "Guide"
+
+[node name="Popup" type="AcceptDialog" parent="."]
+oversampling_override = 1.0
+title = "Guide"
+initial_position = 4
+size = Vector2i(389, 257)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Popup/VBoxContainer"]
+layout_mode = 2
+text = "Icon Scores:"
+
+[node name="PanelContainer" type="PanelContainer" parent="Popup/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ynf5e")
+
+[node name="GridContainer" type="GridContainer" parent="Popup/VBoxContainer/PanelContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_21xkr")
+expand_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_21xkr")
+expand_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_21xkr")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "777"
+
+[node name="PanelContainer2" type="PanelContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer2"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer2/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_6bp64")
+expand_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer2/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_6bp64")
+expand_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer2/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_6bp64")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer2/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "300"
+
+[node name="PanelContainer3" type="PanelContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer3"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer3/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_344ge")
+expand_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer3/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_344ge")
+expand_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer3/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_344ge")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer3/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "100-300"
+
+[node name="PanelContainer4" type="PanelContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer4"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer4/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_ynf5e")
+expand_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer4/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_ynf5e")
+expand_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer4/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_ynf5e")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer4/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "200"
+
+[node name="PanelContainer5" type="PanelContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer5"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer5/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_kry3j")
+expand_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer5/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_kry3j")
+expand_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer5/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AtlasTexture_kry3j")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer5/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "150"
+
+[node name="PanelContainer6" type="PanelContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer6"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer6/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AnimatedTexture_jkdf5")
+expand_mode = 2
+
+[node name="TextureRect2" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer6/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AnimatedTexture_jkdf5")
+expand_mode = 2
+
+[node name="TextureRect3" type="TextureRect" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer6/HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+texture = SubResource("AnimatedTexture_jkdf5")
+expand_mode = 2
+
+[node name="Label" type="Label" parent="Popup/VBoxContainer/PanelContainer/GridContainer/PanelContainer6/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "100"
+
+[node name="Label2" type="Label" parent="Popup/VBoxContainer"]
+layout_mode = 2
+text = "Mult doubles when you score.
+All mult over 1 halves when you miss."
+
+[node name="Mult" type="Label" parent="."]
+visible = false
+offset_left = 841.0
+offset_top = 414.0
+offset_right = 1139.0
+offset_bottom = 551.0
+theme_override_font_sizes/font_size = 96
+text = "x1.0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Max Mult" type="Label" parent="."]
+visible = false
+offset_left = 1024.0
+offset_top = 549.0
+offset_right = 1133.0
+offset_bottom = 583.0
+theme_override_font_sizes/font_size = 24
+text = "Max: x2.0"
+
 [connection signal="pressed" from="Button" to="." method="_on_stop_pressed"]
 [connection signal="stopped" from="Slots/Slot2" to="." method="score"]
+[connection signal="pressed" from="Guide Button" to="Popup" method="show"]

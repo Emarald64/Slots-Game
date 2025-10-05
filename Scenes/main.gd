@@ -1,20 +1,27 @@
 extends Node2D
 
-var coins:=50
+var coins:=100
 var currentSlot:=3
 var coinsToAdd:=0
 var coinAddProgress:=0.0
 var coinCountSpeed:=10.0
+var maxMult:=1.0
+var mult:=1.0
 
 func _ready() -> void:
 	$Button.grab_focus.call_deferred()
+	$"Coin Display/Label".text=str(coins)
 
 func _process(delta: float) -> void:
 	#Animate coin counter
-	if coinsToAdd>0:
+	if coinsToAdd!=0:
 		coinAddProgress+=delta
-		coins+=min(coinsToAdd,floori(coinAddProgress*coinCountSpeed))
-		coinsToAdd-=min(coinsToAdd,floori(coinAddProgress*coinCountSpeed))
+		if coinsToAdd>0:
+			coins+=min(coinsToAdd,floori(coinAddProgress*coinCountSpeed))
+			coinsToAdd-=min(coinsToAdd,floori(coinAddProgress*coinCountSpeed))
+		else:
+			coins+=max(coinsToAdd,-floori(coinAddProgress*coinCountSpeed))
+			coinsToAdd-=max(coinsToAdd,-floori(coinAddProgress*coinCountSpeed))
 		coinAddProgress=fmod(coinAddProgress,1.0/coinCountSpeed)
 		$"Coin Display/Label".text=str(coins)
 	else:coinAddProgress=0
@@ -22,7 +29,7 @@ func _process(delta: float) -> void:
 func _on_stop_pressed() -> void:
 	if $"Button Lockout".is_stopped():
 		if currentSlot==3:
-			if coins<=0:
+			if coins<10:
 				get_tree().reload_current_scene()
 			else:
 				for i in range(3):
@@ -30,8 +37,7 @@ func _on_stop_pressed() -> void:
 				$Button.text='Stop'
 				$"Button Lockout".wait_time=1.8
 				currentSlot=0
-				coins-=1
-				$"Coin Display/Label".text=str(coins)
+				addCoins(-10)
 		else:
 			get_node("Slots/Slot"+str(currentSlot)).stop()
 			if currentSlot==2:
@@ -49,11 +55,12 @@ func addCoins(ammount:int):
 		$"New Coins".add_theme_color_override("font_color",Color(0,1,0))
 		$"New Coins".text="+"+str(ammount)
 	coinsToAdd+=ammount
-	coinCountSpeed=max(10.0,ammount/2.0)
+	coinCountSpeed=max(10.0,absf(coinsToAdd/2.0))
+	print(coinCountSpeed)
 
 func scoreRow(icon:int) -> int:
-	const iconScores=[10,10,10,10,-1,30,777,15,5,20]
-	if icon==4:return randi_range(5,20)
+	const iconScores=[100,100,100,100,-1,300,777,150,5,200]
+	if icon==4:return randi_range(100,300)
 	else:return iconScores[icon]
 
 func score():
@@ -62,7 +69,6 @@ func score():
 	#addCoins(10)
 	for i in range(3):
 		slots.append(get_node("Slots/Slot"+str(i)).getVisibleIcons())
-	print(slots)
 #	horazontals
 	for i in range(3):
 		if slots[0][i]==slots[1][i] and slots[0][i]==slots[2][i]:
@@ -73,4 +79,15 @@ func score():
 		newCoins+=scoreRow(slots[0][0])
 	if slots[2][0]==slots[1][1] and slots[2][0]==slots[0][2]:
 		newCoins+=scoreRow(slots[2][0])
-	if newCoins>0:addCoins(newCoins)
+	if newCoins>0:
+		@warning_ignore("narrowing_conversion")
+		addCoins(newCoins*mult)
+		mult=min(maxMult,mult*2)
+	else:
+		mult=((mult-1)/2)+1
+	if maxMult>1:updateMult()
+	
+func updateMult():
+	$"Max Mult".text='Max: x'+str(maxMult)
+	$Mult.text="x"+str(floor(mult*100)/100.0)
+	$Mult.add_theme_font_size_override("font_size",min(mult**0.5,6)*16)

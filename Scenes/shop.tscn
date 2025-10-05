@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://1so1ob8yjk7o" path="res://Scenes/shop.gd" id="1_a0mxf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6mhmv"]
+content_margin_left = 10.0
+content_margin_right = 10.0
 bg_color = Color(0.17641908, 0.17641911, 0.17641899, 1)
 border_width_left = 5
 border_width_top = 5
@@ -15,14 +17,8 @@ corner_radius_bottom_right = 30
 corner_radius_bottom_left = 30
 
 [node name="Shop" type="PanelContainer"]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = 615.0
-offset_top = 27.0
-offset_right = 1075.0
-offset_bottom = 439.0
-grow_horizontal = 0
+offset_right = 460.0
+offset_bottom = 412.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_6mhmv")
 script = ExtResource("1_a0mxf")
 
@@ -34,3 +30,13 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Shop"
 horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
