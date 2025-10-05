@@ -19,6 +19,12 @@ const shopItems={
 		#600,
 		#{affect.slotSlipping:1},
 		#['Chewed Gum']],
+	"Unchewed Gum":[
+		"Put a second, new piece of gum into the machine to make it another 30% slower",
+		200,
+		{affect.spinSpeed:0.70},
+		["Chewed Gum", "Multiplication Key"]
+	],
 	"Lucky Oil":[
 		"If on the last slot you would be one away from scoring\nadds a 50% chance for the reals to slip\none more or less to hit it but\ncauses the last reel to spin 25% faster",
 		500,
@@ -62,7 +68,7 @@ func updateShop():
 
 func shopItemPressed(title:String):
 	var item=shopItems[title]
-	if(get_parent().coins>=item[1]):
+	if((get_parent().coins + get_parent().coinsToAdd)>=item[1]):
 		get_parent().addCoins(-item[1])
 		for itemAffect in item[2]:
 			match itemAffect:

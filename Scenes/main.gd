@@ -31,6 +31,7 @@ func _process(delta: float) -> void:
 func _on_stop_pressed() -> void:
 	if $"Button Lockout".is_stopped():
 		if currentSlot==3:
+			#Restart slots
 			if coins<10:
 				get_tree().reload_current_scene()
 			else:
@@ -41,9 +42,10 @@ func _on_stop_pressed() -> void:
 				currentSlot=0
 				addCoins(-10)
 		else:
+			#Stop slot
 			if currentSlot==2:
 				$Button.text='Start'
-				if randf()>luckySlipChance:justDidLuckySlip=$Slots/Slot2.luckyStop(partialScore())
+				if randf()<luckySlipChance:justDidLuckySlip=$Slots/Slot2.luckyStop(partialScore())
 				else:
 					justDidLuckySlip=false
 					$Slots/Slot2.stop()
@@ -65,7 +67,7 @@ func addCoins(ammount:int):
 
 func scoreRow(icon:int) -> int:
 	const iconScores=[100,100,100,100,-1,300,777,150,5,200]
-	if icon==4:return randi_range(100,300)
+	if icon==4:return randi_range(10,30)*10
 	else:return iconScores[icon]
 
 func score():
@@ -93,6 +95,7 @@ func score():
 	else:
 		mult=((mult-1)/2)+1
 	if maxMult>1:updateMult()
+	#save()
 	
 func partialScore() -> Vector2i:
 	var slots:=[]
@@ -121,3 +124,12 @@ func updateMult():
 	$"Max Mult".text='Max: x'+str(maxMult)
 	$Mult.text="x"+str(floor(mult*100)/100.0)
 	$Mult.add_theme_font_size_override("font_size",min(mult**0.5,6)*16)
+
+#func save():
+	#var save_file = FileAccess.open("user://savegame.save", FileAccess.WRITE)
+	#if save_file==null:print("cant open save")
+	#save_file.store_32(coins+coinsToAdd)
+	#save_file.store_float(mult)
+	#save_file.store_csv_line($Shop.boughtItems)
+	#save_file.close()
+	#print('saved')
