@@ -20,7 +20,7 @@ const shopItems={
 		#{affect.slotSlipping:1},
 		#['Chewed Gum']],
 	"Unchewed Gum":[
-		"Put a second, new piece of gum into the machine to make it another 30% slower",
+		"Put a second, new piece of gum into the machine to\nmake it another 30% slower",
 		200,
 		{affect.spinSpeed:0.70},
 		["Chewed Gum", "Multiplication Key"]
@@ -70,39 +70,49 @@ func shopItemPressed(title:String):
 	var item=shopItems[title]
 	if((get_parent().coins + get_parent().coinsToAdd)>=item[1]):
 		get_parent().addCoins(-item[1])
-		for itemAffect in item[2]:
-			match itemAffect:
-				affect.spinSpeed:
-					for i in range(3):
-						var currentSlot=get_node("../Slots/Slot"+str(i))
-						var spinning=currentSlot.velocity<currentSlot.maxSpeed+1
-						currentSlot.maxSpeed*=item[2][itemAffect]
-						if spinning:
-							currentSlot.velocity=currentSlot.maxSpeed
-				affect.sevenCount:
-					get_node("../Slots/Slot"+str(item[2][itemAffect])).currentIcons.append(icons.SEVEN)
-					get_node("../Slots/Slot"+str(item[2][itemAffect])).updateIcons()
-				affect.slotSlipping:
-					for i in range(3):
-						var currentSlot=get_node("../Slots/Slot"+str(i))
-						currentSlot.slotSlipping-=item[2][itemAffect]
-				affect.maxMult:
-					get_parent().maxMult*=item[2][itemAffect]
-					get_node('../Mult').show()
-					get_node('../Max Mult').show()
-					get_parent().updateMult()
-				affect.luckySlipChance:
-					get_parent().luckySlipChance+=item[2][itemAffect]
-				affect.lastSlotSpeed:
-					var currentSlot=get_node("../Slots/Slot2")
+		doItemAffects(title)
+		#print(currentItems)
+		get_node('../Button').grab_focus.call_deferred()
+		updateShop()
+
+func doItemAffects(itemTitle:String):
+	var item=shopItems[itemTitle]
+	for itemAffect in item[2]:
+		match itemAffect:
+			affect.spinSpeed:
+				for i in range(3):
+					var currentSlot=get_node("../Slots/Slot"+str(i))
 					var spinning=currentSlot.velocity<currentSlot.maxSpeed+1
 					currentSlot.maxSpeed*=item[2][itemAffect]
 					if spinning:
 						currentSlot.velocity=currentSlot.maxSpeed
-		currentItems.erase(title)
-		boughtItems.append(title)
-		for itemToUnlock in shopItems:
-			if itemToUnlock not in boughtItems and itemToUnlock not in currentItems and shopItems[itemToUnlock][3].all(boughtItems.has):
-				currentItems.append(itemToUnlock)
-		#print(currentItems)
-		updateShop()
+			affect.sevenCount:
+				get_node("../Slots/Slot"+str(item[2][itemAffect])).currentIcons.append(icons.SEVEN)
+				get_node("../Slots/Slot"+str(item[2][itemAffect])).updateIcons()
+			affect.slotSlipping:
+				for i in range(3):
+					var currentSlot=get_node("../Slots/Slot"+str(i))
+					currentSlot.slotSlipping-=item[2][itemAffect]
+			affect.maxMult:
+				get_parent().maxMult*=item[2][itemAffect]
+				get_node('../Mult').show()
+				get_node('../Max Mult').show()
+				get_parent().updateMult()
+			affect.luckySlipChance:
+				get_parent().luckySlipChance+=item[2][itemAffect]
+			affect.lastSlotSpeed:
+				var currentSlot=get_node("../Slots/Slot2")
+				var spinning=currentSlot.velocity<currentSlot.maxSpeed+1
+				currentSlot.maxSpeed*=item[2][itemAffect]
+				if spinning:
+					currentSlot.velocity=currentSlot.maxSpeed
+	currentItems.erase(itemTitle)
+	boughtItems.append(itemTitle)
+	for itemToUnlock in shopItems:
+		if itemToUnlock not in boughtItems and itemToUnlock not in currentItems and shopItems[itemToUnlock][3].all(boughtItems.has):
+			currentItems.append(itemToUnlock)
+
+func addItemsFromArray(items:PackedStringArray):
+	for itemTitle in items:
+		doItemAffects(itemTitle)
+	updateShop()

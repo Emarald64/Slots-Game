@@ -1,6 +1,6 @@
 extends Node2D
 
-var coins:=1000
+var coins:=100
 var currentSlot:=3
 var coinsToAdd:=0
 var coinAddProgress:=0.0
@@ -13,8 +13,11 @@ var justDidLuckySlip:=false
 func _ready() -> void:
 	$Button.grab_focus.call_deferred()
 	$"Coin Display/Label".text=str(coins)
+	if FileAccess.file_exists('save.bin'):loadSave()
 
 func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("debug1"):
+		addCoins(100)
 	#Animate coin counter
 	if coinsToAdd!=0:
 		coinAddProgress+=delta
@@ -32,8 +35,8 @@ func _on_stop_pressed() -> void:
 	if $"Button Lockout".is_stopped():
 		if currentSlot==3:
 			#Restart slots
-			if coins<10:
-				get_tree().reload_current_scene()
+			if (coins+coinsToAdd)<10:
+				$"Game Over".show()
 			else:
 				for i in range(3):
 					get_node("Slots/Slot"+str(i)).startWithDelay(((2-i)/4.0)+randf_range(0,0.2))
@@ -125,11 +128,24 @@ func updateMult():
 	$Mult.text="x"+str(floor(mult*100)/100.0)
 	$Mult.add_theme_font_size_override("font_size",min(mult**0.5,6)*16)
 
-#func save():
-	#var save_file = FileAccess.open("user://savegame.save", FileAccess.WRITE)
-	#if save_file==null:print("cant open save")
-	#save_file.store_32(coins+coinsToAdd)
-	#save_file.store_float(mult)
-	#save_file.store_csv_line($Shop.boughtItems)
-	#save_file.close()
-	#print('saved')
+func save():
+	var save_file = FileAccess.open("user://save.bin", FileAccess.WRITE)
+	if save_file==null:print("cant open save")
+	save_file.store_32(coins+coinsToAdd)
+	save_file.store_float(mult)
+	save_file.store_csv_line($Shop.boughtItems)
+	save_file.close()
+	print('saved')
+	
+func loadSave():
+	var save_file = FileAccess.open("user://save.bin", FileAccess.READ)
+	if save_file==null:print("cant open save")
+	coins=save_file.get_32()
+	mult=save_file.get_float()
+	$Shop.addItemsFromArray(save_file.get_csv_line())
+	save_file.close()
+	print('loaded')
+
+
+func restart() -> void:
+	get_tree().reload_current_scene()
