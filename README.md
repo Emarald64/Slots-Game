@@ -1,4 +1,6 @@
 # Slots
+![hackatime](https://hackatime-badge.hackclub.com/U0785D5VDEK/exploration-game)
+
 <img width="630" height="500" alt="Screenshot_20251005_221745" src="https://github.com/user-attachments/assets/d72a4e1a-9c0e-4b0d-941c-a1f4014ecbf3" />
 
 Stop the slots and line up 3 in a row to earn coins. Use those coins to buy upgrades from the shop to get even more coins!
